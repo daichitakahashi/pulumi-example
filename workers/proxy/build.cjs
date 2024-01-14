@@ -9,5 +9,7 @@ build({
   sourcemap: "external",
 	outfile: "./dist/index.js",
 	bundle: true,
-	format: "esm"
+	format: "esm",
+	platform: "node",
+	minify: true
 })

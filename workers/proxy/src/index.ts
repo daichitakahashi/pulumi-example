@@ -1,5 +1,7 @@
 import { ulidFactory } from 'ulid-workers';
 
+import { Buffer } from 'node:buffer';
+
 const ulid = ulidFactory({ monotonic: true });
 
 export interface Env {
@@ -21,6 +23,12 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		const buf = Buffer.from('hello world', 'utf8');
+		console.log(buf.toString('hex'));
+		// Prints: 68656c6c6f20776f726c64
+		console.log(buf.toString('base64'));
+		// Prints: aGVsbG8gd29ybGQ=
+
 		return new Response('Hello World! ' + ulid());
 	},
 };
