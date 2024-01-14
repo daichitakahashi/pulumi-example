@@ -2,12 +2,14 @@
     "name": "pulumi-example",
     "main": "index.ts",
     "devDependencies": {
-        "@types/node": "^18"
+        "@types/node": "^18",
+        "tsx": "^4.7.0"
     },
     "dependencies": {
-        "@pulumi/aws": "^6.0.0",
-        "@pulumi/awsx": "^2.0.2",
         "@pulumi/cloudflare": "^5.18.1",
-        "@pulumi/pulumi": "^3.0.0"
+        "@pulumi/pulumi": "^3.0.0",
+        "fp-ts": "^2.16.2",
+        "toml": "^3.0.0",
+        "zod": "^3.22.4"
     }
 }

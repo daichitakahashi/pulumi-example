@@ -1,23 +1,24 @@
+import { Config } from "@pulumi/pulumi";
 import * as cf from "@pulumi/cloudflare";
+import { pipe } from "fp-ts/function";
+import * as E from "fp-ts/Either";
 
-new cf.D1Database("", {
-  accountId: "",
-  name: "",
-});
+import { buildWorker } from "./util/wrangler";
 
-const q = new cf.Queue("", {
-  accountId: "",
-  name: "",
-});
+const config = new Config();
+const cfAccountId = config.require("cf-account-id");
 
-new cf.WorkerScript("", {
-  name: "",
-  accountId: "",
-  content: "",
-  queueBindings: [
-    {
-      binding: "",
-      queue: q.name,
-    },
-  ],
-});
+pipe(
+  buildWorker("workers/proxy"),
+  E.flatMap(({ content, compatibilityDate, compatibilityFlags }) =>
+    E.of(
+      new cf.WorkerScript("hello-worker", {
+        name: "hello-worker",
+        accountId: cfAccountId,
+        content,
+        compatibilityDate,
+        compatibilityFlags,
+      })
+    )
+  )
+);
