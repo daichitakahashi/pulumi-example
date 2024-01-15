@@ -32,6 +32,44 @@ const result = pipe(
       ),
     ),
   ),
+  E.bind("web", ({ proxy }) =>
+    E.of(
+      new cf.PagesProject("web-pages", {
+        accountId: cfAccountId,
+        name: `${resourcePrefix}-web`,
+        productionBranch: "main",
+        buildConfig: {
+          rootDir: "web",
+          buildCommand: "pnpm build",
+          destinationDir: "public",
+        },
+        deploymentConfigs: {
+          preview: {
+            serviceBindings: [
+              {
+                name: "WORKER",
+                service: proxy.name,
+              },
+            ],
+            environmentVariables: {
+              STAGE: "DEV",
+            },
+          },
+          production: {
+            serviceBindings: [
+              {
+                name: "WORKER",
+                service: proxy.name,
+              },
+            ],
+            environmentVariables: {
+              STAGE: "PROD",
+            },
+          },
+        },
+      }),
+    ),
+  ),
 );
 
 if (E.isLeft(result)) {
