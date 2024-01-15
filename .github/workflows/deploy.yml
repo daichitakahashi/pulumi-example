@@ -25,6 +25,8 @@ jobs:
           stack-name: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - run: pnpm install --frozen-lockfile
+        working-directory: web
       - uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
