@@ -19,8 +19,17 @@ jobs:
           run_install: |
             - args: [--frozen-lockfile]
       - uses: pulumi/actions@v5
+        id: pulumi-deploy
         with:
           command: up
           stack-name: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ steps.pulumi-deploy.outputs.webProjectName }}
+          wranglerVersion: '3'
+          workingDirectory: web
+          directory: public
