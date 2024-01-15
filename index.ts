@@ -41,7 +41,7 @@ const result = pipe(
         buildConfig: {
           rootDir: "web",
           buildCommand: "pnpm build",
-          destinationDir: "public",
+          destinationDir: "web/public",
         },
         deploymentConfigs: {
           preview: {
