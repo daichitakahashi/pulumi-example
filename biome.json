@@ -1,0 +1,28 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "include": ["index.ts", "util"],
+    "ignore": ["node_modules", "workers"],
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUndeclaredVariables": "error",
+        "noUnusedVariables": "error",
+        "useHookAtTopLevel": "error",
+        "useExhaustiveDependencies": "error"
+      },
+      "style": {
+        "noNamespace": "error"
+      }
+    }
+  }
+}

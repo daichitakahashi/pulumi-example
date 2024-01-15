@@ -2,8 +2,8 @@
     "name": "pulumi-example",
     "main": "index.ts",
     "devDependencies": {
-        "@types/node": "^18",
-        "tsx": "^4.7.0"
+        "@biomejs/biome": "^1.5.1",
+        "@types/node": "^18"
     },
     "dependencies": {
         "@pulumi/cloudflare": "^5.18.1",

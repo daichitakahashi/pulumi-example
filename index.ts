@@ -1,7 +1,7 @@
-import { Config, getProject, getStack } from "@pulumi/pulumi";
 import * as cf from "@pulumi/cloudflare";
-import { pipe } from "fp-ts/function";
+import { Config, getProject, getStack } from "@pulumi/pulumi";
 import * as E from "fp-ts/Either";
+import { pipe } from "fp-ts/function";
 
 import { buildWorker } from "./util/wrangler";
 
@@ -27,11 +27,11 @@ const result = pipe(
             content,
             compatibilityDate,
             compatibilityFlags,
-          })
-        )
-      )
-    )
-  )
+          }),
+        ),
+      ),
+    ),
+  ),
 );
 
 if (E.isLeft(result)) {

@@ -1,9 +1,9 @@
-import * as toml from "toml";
-import { readFileSync } from "fs";
-import * as z from "zod";
-import { execSync } from "child_process";
-import { pipe } from "fp-ts/function";
+import { execSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import * as IOE from "fp-ts/IOEither";
+import { pipe } from "fp-ts/function";
+import * as toml from "toml";
+import * as z from "zod";
 
 const wranglerTomlSchema = z.object({
   main: z.string().min(0),
@@ -18,7 +18,7 @@ const readWranglerToml = () =>
   pipe(
     readFileSync("wrangler.toml").toString(),
     toml.parse,
-    wranglerTomlSchema.parse
+    wranglerTomlSchema.parse,
   );
 
 export const buildWorker = (dir: string) =>
@@ -31,23 +31,23 @@ export const buildWorker = (dir: string) =>
           IOE.bind("config", () =>
             IOE.tryCatch(
               () => readWranglerToml(),
-              (e) => `${e}`
-            )
+              (e) => `${e}`,
+            ),
           ),
           IOE.bindW("build", ({ config }) =>
             IOE.tryCatch(
               () => execSync(config.build.command),
-              (e) => `${e}`
-            )
+              (e) => `${e}`,
+            ),
           ),
           IOE.flatMap(({ config }) =>
             IOE.of({
               content: readFileSync(config.main).toString(),
               compatibilityDate: config.compatibility_date,
               compatibilityFlags: config.compatibility_flags,
-            })
-          )
+            }),
+          ),
         ),
-      ({ cwd }) => IOE.of(process.chdir(cwd))
-    )
+      ({ cwd }) => IOE.of(process.chdir(cwd)),
+    ),
   )();
