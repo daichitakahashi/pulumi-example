@@ -1,10 +1,9 @@
 import * as toml from "toml";
-import { existsSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import * as z from "zod";
 import { execSync } from "child_process";
-import { pipe, flow } from "fp-ts/function";
+import { pipe } from "fp-ts/function";
 import * as IOE from "fp-ts/IOEither";
-import { join } from "path";
 
 const wranglerTomlSchema = z.object({
   main: z.string().min(0),
