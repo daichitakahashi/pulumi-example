@@ -1,0 +1,5 @@
+config:
+  cloudflare:apiToken:
+    secure: AAABAHt2xwGgdJvXzbq/IvkiJ4URFnxG70AOI6rMhh/OmToKcXeLNFPdJD6mKN5lw2QHxZ8WeJcibcxfDFatuNa/2hXZSOZA
+  pulumi-example:cfAccountId:
+    secure: AAABACwtFWVaLmxAZ27893/B29PlBwUfPliiO+JW7gJakJ8V00lSqPAE4YqFecN406xHEbUk1IfPTBLH49WMrw==
