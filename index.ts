@@ -48,7 +48,8 @@ const result = pipe(
             serviceBindings: [
               {
                 name: "WORKER",
-                service: proxy.id,
+                service: proxy.name,
+                environment: "production",
               },
             ],
             environmentVariables: {
@@ -59,7 +60,8 @@ const result = pipe(
             serviceBindings: [
               {
                 name: "WORKER",
-                service: proxy.id,
+                service: proxy.name,
+                environment: "production",
               },
             ],
             environmentVariables: {
