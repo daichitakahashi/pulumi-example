@@ -61,6 +61,7 @@ if (E.isLeft(result)) {
   throw new Error(result.left);
 }
 
+// Output:
 const { proxy, web } = result.right;
 export const proxyWorkerId = proxy.id;
 export const webProjectName = web.name;
