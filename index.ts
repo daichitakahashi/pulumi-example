@@ -41,14 +41,14 @@ const result = pipe(
         buildConfig: {
           rootDir: "web",
           buildCommand: "pnpm build",
-          destinationDir: "public",
+          destinationDir: "web/public",
         },
         deploymentConfigs: {
           preview: {
             serviceBindings: [
               {
                 name: "WORKER",
-                service: proxy.name,
+                service: proxy.id,
               },
             ],
             environmentVariables: {
@@ -59,7 +59,7 @@ const result = pipe(
             serviceBindings: [
               {
                 name: "WORKER",
-                service: proxy.name,
+                service: proxy.id,
               },
             ],
             environmentVariables: {
