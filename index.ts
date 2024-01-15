@@ -1,3 +1,4 @@
+import * as supabase from "@nitric/pulumi-supabase";
 import * as cf from "@pulumi/cloudflare";
 import { Config, getProject, getStack } from "@pulumi/pulumi";
 import * as E from "fp-ts/Either";
@@ -12,6 +13,20 @@ const resourcePrefix = `${project}-${stack}`;
 
 const config = new Config();
 const cfAccountId = config.requireSecret("cfAccountId");
+
+const org = new supabase.organizations.Organization("my-org", {
+  name: "my-org",
+  tier: "tier_free",
+});
+
+const proj = new supabase.projects.Project("supabase-project", {
+  name: `${resourcePrefix}-supabase-project`,
+  organization_id: org.organization_id,
+  plan: "tier_free",
+  region: "Northeast Asia (Tokyo)",
+  cloud: "AWS",
+  db_pass: "",
+});
 
 const result = pipe(
   E.Do,
