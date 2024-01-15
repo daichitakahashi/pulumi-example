@@ -27,7 +27,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - run: |
           pnpm install --frozen-lockfile
-          pnpm pages:deploy -- --project-name ${{ steps.pulumi-deploy.outputs.webProjectName }}
+          pnpm pages:deploy --project-name ${{ steps.pulumi-deploy.outputs.webProjectName }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
