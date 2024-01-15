@@ -37,25 +37,8 @@ const result = pipe(
       new cf.PagesProject("web-pages", {
         accountId: cfAccountId,
         name: `${resourcePrefix}-web`,
-        productionBranch: "main",
-        buildConfig: {
-          rootDir: "web",
-          buildCommand: "pnpm build",
-          destinationDir: "web/public",
-        },
+        productionBranch: stack === "prod" ? "main" : "dev",
         deploymentConfigs: {
-          preview: {
-            serviceBindings: [
-              {
-                name: "WORKER",
-                service: proxy.name,
-                environment: "production",
-              },
-            ],
-            environmentVariables: {
-              STAGE: "DEV",
-            },
-          },
           production: {
             serviceBindings: [
               {
@@ -65,7 +48,7 @@ const result = pipe(
               },
             ],
             environmentVariables: {
-              STAGE: "PROD",
+              STAGE: stack === "prod" ? "PROD" : "DEV",
             },
           },
         },
@@ -78,4 +61,6 @@ if (E.isLeft(result)) {
   throw new Error(result.left);
 }
 
-export const proxyWorkerId = result.right.proxy.id;
+const { proxy, web } = result.right;
+export const proxyWorkerId = proxy.id;
+export const webProjectName = web.name;
