@@ -39,6 +39,18 @@ const result = pipe(
         name: `${resourcePrefix}-web`,
         productionBranch: stack === "prod" ? "main" : "dev",
         deploymentConfigs: {
+          preview: {
+            serviceBindings: [
+              {
+                name: "WORKER",
+                service: proxy.name,
+                environment: "production",
+              },
+            ],
+            environmentVariables: {
+              STAGE: stack === "prod" ? "PROD" : "DEV",
+            },
+          },
           production: {
             serviceBindings: [
               {
