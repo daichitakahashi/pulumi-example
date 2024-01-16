@@ -15,15 +15,14 @@ export default {
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
-    // SSLモードでDBに接続する。
     const db = new Client({
       connectionString: env.POSTGRES_DSN,
-      ssl: {
-        rejectUnauthorized: true,
-        ca: env.POSTGRES_CERT,
-      },
+      // ssl: {
+      //   cert: env.POSTGRES_CERT, // 現時点で、self signed certificateは使用不可能
+      // },
     });
-    const result = await db.query("select * from users");
+    await db.connect();
+    const result = await db.query("select * from users;");
     const rows = JSON.stringify(result.rows);
 
     const buf = Buffer.from("hello world", "utf8");

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "pg": "^8.11.3",
+    "pg-cloudflare": "^1.1.1",
     "ulid-workers": "^2.1.0"
   }
 }
