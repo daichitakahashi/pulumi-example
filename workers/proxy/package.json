@@ -9,6 +9,8 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231218.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@types/node": "^20.11.0",
     "@types/pg": "^8.10.9",
     "esbuild": "^0.19.11",
