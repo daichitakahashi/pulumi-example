@@ -24,11 +24,13 @@ export const createProxyWorker = (
           content,
           compatibilityDate,
           compatibilityFlags,
-          secretTextBindings: [
+          plainTextBindings: [
             {
               name: "POSTGRES_DSN",
               text: args.postgresDsn,
             },
+          ],
+          secretTextBindings: [
             {
               name: "POSTGRES_CERT",
               text: args.postgresCert,
