@@ -1,24 +1,12 @@
-import { ulidFactory } from "ulid-workers";
-
 import { Buffer } from "node:buffer";
+import { Client } from "pg";
+import { ulidFactory } from "ulid-workers";
 
 const ulid = ulidFactory({ monotonic: true });
 
 export interface Env {
-  // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-  // MY_KV_NAMESPACE: KVNamespace;
-  //
-  // Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-  // MY_DURABLE_OBJECT: DurableObjectNamespace;
-  //
-  // Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-  // MY_BUCKET: R2Bucket;
-  //
-  // Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
-  // MY_SERVICE: Fetcher;
-  //
-  // Example binding to a Queue. Learn more at https://developers.cloudflare.com/queues/javascript-apis/
-  // MY_QUEUE: Queue;
+  POSTGRES_DSN: string;
+  POSTGRES_CERT: string;
 }
 
 export default {
@@ -27,12 +15,25 @@ export default {
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
+    // SSLモードでDBに接続する。
+    const db = new Client({
+      connectionString: env.POSTGRES_DSN,
+      ssl: {
+        rejectUnauthorized: true,
+        ca: env.POSTGRES_CERT,
+      },
+    });
+    const result = await db.query("select * from users");
+    const rows = JSON.stringify(result.rows);
+
     const buf = Buffer.from("hello world", "utf8");
     console.log(buf.toString("hex"));
     // Prints: 68656c6c6f20776f726c64
     console.log(buf.toString("base64"));
     // Prints: aGVsbG8gd29ybGQ=
 
-    return new Response(`Hello World! ${ulid()}`);
+    ctx.waitUntil(db.end());
+
+    return new Response(`Hello World! ${ulid()}, ${rows}`);
   },
 };
