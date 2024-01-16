@@ -18,6 +18,7 @@ jobs:
           version: 8
           run_install: |
             - args: [--frozen-lockfile]
+      - run: pulumi plugin install resource supabase v0.0.4 --server https://github.com/nitrictech/pulumi-supabase/releases/download/v0.0.4
       - uses: pulumi/actions@v5
         id: pulumi-deploy
         with:
@@ -25,6 +26,7 @@ jobs:
           stack-name: ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       - run: |
           pnpm install --frozen-lockfile
           pnpm pages:deploy --project-name ${{ steps.pulumi-deploy.outputs.webProjectName }}
@@ -32,11 +34,3 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         working-directory: web
-      # - uses: cloudflare/pages-action@v1
-      #   with:
-      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      #     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      #     projectName: ${{ steps.pulumi-deploy.outputs.webProjectName }}
-      #     wranglerVersion: '3'
-      #     workingDirectory: web
-      #     directory: web/public

@@ -13,7 +13,8 @@
         "forceConsistentCasingInFileNames": true
     },
     "files": [
-        "index.ts"
+        "./*.ts",
+        "utils/*.ts"
     ],
     "exclude": ["workers"]
 }

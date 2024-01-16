@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@nitric/pulumi-supabase':
+        specifier: ^0.0.4
+        version: 0.0.4
       '@pulumi/cloudflare':
         specifier: ^5.18.1
         version: 5.18.1
@@ -1564,6 +1567,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@nitric/pulumi-supabase@0.0.4:
+    resolution: {integrity: sha512-NlUg+onBqkRd1gYbKlUfwLPvXRJvJtX/07PgOJ9EDEhZJwh4cncXjGybQd3bJs+meVASL4c1PmdFr1e/oG5ljg==}
+    dependencies:
+      '@pulumi/pulumi': 3.101.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@npmcli/fs@3.1.0:
     resolution: {integrity: sha512-7kZUAaLscfgbwBQRbvdMYaZOWyMEcPTH/tJjnyAWJ/dvvs9Ef+CERx/qJb9GExJpl1qipaDGn7KqHnFGGixd0w==}

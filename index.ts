@@ -1,71 +1,53 @@
-import * as cf from "@pulumi/cloudflare";
 import { Config, getProject, getStack } from "@pulumi/pulumi";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
-import { buildWorker } from "./util/wrangler";
+import { createSupabaseProject } from "./supabase";
+import { createProxyWorker } from "./workers";
+import { createWebPage } from "./web";
 
 // Project information.
-const project = getProject();
-const stack = getStack();
-const resourcePrefix = `${project}-${stack}`;
-
-const config = new Config();
-const cfAccountId = config.requireSecret("cfAccountId");
 
 const result = pipe(
   E.Do,
-  E.bind("proxy", () =>
-    pipe(
-      buildWorker("workers/proxy"),
-      E.flatMap(({ content, compatibilityDate, compatibilityFlags }) =>
-        E.of(
-          new cf.WorkerScript("proxy-worker", {
-            name: `${resourcePrefix}-proxy-worker`,
-            accountId: cfAccountId,
-            module: true,
-            content,
-            compatibilityDate,
-            compatibilityFlags,
-          }),
-        ),
-      ),
+
+  // 各設定値
+  E.let("config", () => {
+    const project = getProject();
+    const stack = getStack();
+    const config = new Config();
+    return {
+      isProd: stack === "prod",
+      prefix: `${project}-${stack}`,
+      supabaseOrganizationId: config.requireNumber("supabaseOrganizationId"),
+      supabaseDbPassword: config.requireSecret("supabaseDbPassword"),
+      cfAccountId: config.requireSecret("cfAccountId"),
+    };
+  }),
+
+  // Supabase: データベース
+  E.let("supabase", ({ config }) =>
+    createSupabaseProject(
+      `${config.prefix}-supabase-project`,
+      config.supabaseOrganizationId,
+      config.supabaseDbPassword,
     ),
   ),
-  E.bind("web", ({ proxy }) =>
-    E.of(
-      new cf.PagesProject("web-pages", {
-        accountId: cfAccountId,
-        name: `${resourcePrefix}-web`,
-        productionBranch: stack === "prod" ? "main" : "dev",
-        deploymentConfigs: {
-          preview: {
-            serviceBindings: [
-              {
-                name: "WORKER",
-                service: proxy.name,
-                environment: "production",
-              },
-            ],
-            environmentVariables: {
-              STAGE: stack === "prod" ? "PROD" : "DEV",
-            },
-          },
-          production: {
-            serviceBindings: [
-              {
-                name: "WORKER",
-                service: proxy.name,
-                environment: "production",
-              },
-            ],
-            environmentVariables: {
-              STAGE: stack === "prod" ? "PROD" : "DEV",
-            },
-          },
-        },
-      }),
-    ),
+
+  // Worker: プロキシ
+  E.bind("proxy", ({ config }) =>
+    createProxyWorker(`${config.prefix}-proxy-worker`, {
+      accountId: config.cfAccountId,
+    }),
+  ),
+
+  // Pages: Webサイト
+  E.let("web", ({ config, proxy }) =>
+    createWebPage(`${config.prefix}-web`, {
+      isProd: config.isProd,
+      accountId: config.cfAccountId,
+      proxyWorkerName: proxy.name,
+    }),
   ),
 );
 

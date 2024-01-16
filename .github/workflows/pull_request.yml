@@ -18,9 +18,11 @@ jobs:
           version: 8
           run_install: |
             - args: [--frozen-lockfile]
+      - run: pulumi plugin install resource supabase v0.0.4 --server https://github.com/nitrictech/pulumi-supabase/releases/download/v0.0.4
       - uses: pulumi/actions@v5
         with:
           command: preview
           stack-name: ${{ github.base_ref == 'main' && 'prod' || 'dev' }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
