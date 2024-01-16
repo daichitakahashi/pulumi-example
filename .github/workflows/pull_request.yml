@@ -24,3 +24,4 @@ jobs:
           stack-name: ${{ github.base_ref == 'main' && 'prod' || 'dev' }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
