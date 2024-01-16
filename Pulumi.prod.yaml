@@ -3,3 +3,6 @@ config:
     secure: AAABADdsXpm3gACh2JBZLKRYzHV3PDgzztkll/4YddtPsX812dMIOesb1S9qDfUrLfysqc/uuttmlKfhz4xPKeofjWA1M6sM
   pulumi-example:cfAccountId:
     secure: AAABAJfDb5KdcWHk7rT/pxpN76a2kU49jW1VTPOjiUE9o73bf4xs2fQRrVeCz4C+cHZCYX3LPhofg6YWpXxERA==
+  pulumi-example:supabaseDbPassword:
+    secure: AAABANlihMk9NgjWCrC1Bc1mL0zxI9ohLUIgK5I992CT2s4bkztWOB7wu1FW5TWGnRElHSQ=
+  pulumi-example:supabaseOrganizationId: "700022"
