@@ -1,4 +1,4 @@
-import { Config, getProject, getStack } from "@pulumi/pulumi";
+import { Config, getProject, getStack, interpolate } from "@pulumi/pulumi";
 import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
@@ -39,7 +39,7 @@ const result = pipe(
   E.bind("proxy", ({ config, supabase }) =>
     createProxyWorker(`${config.prefix}-proxy-worker`, {
       accountId: config.cfAccountId,
-      postgresDsn: `postgres://postgres.${supabase.project_ref}:${supabase.db_pass}@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres`,
+      postgresDsn: interpolate`postgres://postgres.${supabase.project_ref}:${supabase.db_pass}@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres`,
       postgresCert: config.supabaseDbCert,
     }),
   ),
