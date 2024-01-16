@@ -18,6 +18,7 @@ jobs:
           version: 8
           run_install: |
             - args: [--frozen-lockfile]
+      - run: pulumi plugin install resource supabase v0.0.4 --server https://github.com/nitrictech/pulumi-supabase/releases/download/v0.0.4
       - uses: pulumi/actions@v5
         with:
           command: preview
