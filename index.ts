@@ -3,8 +3,8 @@ import * as E from "fp-ts/Either";
 import { pipe } from "fp-ts/function";
 
 import { createSupabaseProject } from "./supabase";
-import { createProxyWorker } from "./workers";
 import { createWebPage } from "./web";
+import { createProxyWorker } from "./workers";
 
 // Project information.
 
@@ -21,6 +21,7 @@ const result = pipe(
       prefix: `${project}-${stack}`,
       supabaseOrganizationId: config.requireNumber("supabaseOrganizationId"),
       supabaseDbPassword: config.requireSecret("supabaseDbPassword"),
+      supabaseDbCert: config.requireSecret("supabaseDbCert"),
       cfAccountId: config.requireSecret("cfAccountId"),
     };
   }),
@@ -35,9 +36,11 @@ const result = pipe(
   ),
 
   // Worker: プロキシ
-  E.bind("proxy", ({ config }) =>
+  E.bind("proxy", ({ config, supabase }) =>
     createProxyWorker(`${config.prefix}-proxy-worker`, {
       accountId: config.cfAccountId,
+      postgresDsn: `postgres://postgres.${supabase.project_ref}:${supabase.db_pass}@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres`,
+      postgresCert: config.supabaseDbCert,
     }),
   ),
 

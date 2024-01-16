@@ -1,5 +1,8 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.5.1/schema.json",
+  "files": {
+    "ignore": ["node_modules/*", "workers/*", "web/*"]
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
@@ -10,8 +13,6 @@
   },
   "linter": {
     "enabled": true,
-    "include": ["index.ts", "util"],
-    "ignore": ["node_modules", "workers"],
     "rules": {
       "recommended": true,
       "correctness": {
